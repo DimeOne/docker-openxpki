@@ -3,7 +3,6 @@ FROM debian:jessie
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ENV S6_OVERLAY_VERSION v1.11.0.1
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y wget && \
@@ -22,14 +21,11 @@ RUN apt-get update && \
       openca-tools \
       mysql-client && \
     a2enmod fcgid && \
-    wget -q -O - https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz | tar xzf - -C / && \
     apt-get remove -y wget && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm /var/www/html/index.html
 
 ADD scripts/docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
-
-COPY configs/services.d/apache2 /etc/services.d/apache2
-COPY configs/services.d/openxpki /etc/services.d/openxpki
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
