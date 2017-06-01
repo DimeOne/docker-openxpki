@@ -1,2 +1,0 @@
-/var/log/apache2 true www-data:www-data 0640 0750
-/var/log/openxpki true openxpki:www-data 0660 0770

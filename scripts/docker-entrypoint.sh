@@ -1,5 +1,18 @@
 #!/bin/bash
 
+function fixPermissions {
+
+  chown openxpki:openxpki /etc/openxpki -R
+  if [ -f "/etc/openxpki/createconfig.sh" ]; then
+    chmod 0700 /etc/openxpki/create_config.sh
+    chown root:root /etc/openxpki/create_config.sh
+  fi
+  
+  mkdir -p /var/log/apache2 && chown -R www-data:www-data /var/log/apache2 && chmod 0775 /var/log/apache2 && chmod 0664 /var/log/apache2/*
+  mkdir -p /var/log/openxpki && chown -R openxpki:www-data /var/log/openxpki && chmod 0775 /var/log/openxpki && chmod 0664 /var/log/openxpki/*
+
+}
+
 function checkDbVariables {
   if [ -z "${APP_DB_NAME}" ]; then echo "Missing APP_DB_NAME, set this variable or link a mysql server with the name mysql."; exit 101; fi
   if [ -z "${APP_DB_HOST}" ]; then echo "Missing APP_DB_HOST, set this variable or link a mysql server with the name mysql."; exit 102; fi
@@ -83,6 +96,7 @@ if [ -n "${APP_DB_PORT}" ]; then echo "Replacing DB_PORT with given APP_DB_PORT:
 if [ -n "${APP_DB_USER}" ]; then echo "Replacing DB_USER with given APP_DB_USER: ${APP_DB_USER}"; sed -i "s/user: .*/user: ${APP_DB_USER}/" /etc/openxpki/config.d/system/database.yaml; fi
 if [ -n "${APP_DB_PASS}" ]; then echo "Replacing DB_PASS with given APP_DB_PASS: ${APP_DB_PASS}"; sed -i "s/passwd: .*/passwd: ${APP_DB_PASS}/" /etc/openxpki/config.d/system/database.yaml; fi
 
+fixPermissions
 
 # Start depending on parameters
 if [ "$1" == "initdb" ]; then
