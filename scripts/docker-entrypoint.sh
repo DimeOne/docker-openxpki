@@ -196,7 +196,6 @@ elif [ -z "$1" ]; then
       echo "================================================"
       create_db
     fi
-    waitForDbConnection
     echo >/etc/openxpki/.initiated
     echo "================================================"
     echo "Initiating database."
