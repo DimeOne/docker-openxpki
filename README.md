@@ -97,7 +97,11 @@ Wait for a succesful database connection using root and credentials from environ
 
 ## run
 
-Run the Server.
+Run the Servers.
+
+## version
+
+Show the versions of the used tools.
 
 # Environment Variables:
 

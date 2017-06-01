@@ -179,6 +179,13 @@ elif [ "$1" == "wait_for_db" ]; then
   echo "================================================"
   checkDbVariables
   waitForDbConnection
+elif [ "$1" == "version" ]; then
+  echo "================================================"
+  echo "Versions:"
+  echo "================================================"
+  perl -v
+  apache2 -v
+  openxpkiadm version
 elif [ "$1" == "run" ]; then
   echo "Launching S6 supervisor to start Apache2 and OpenXPKI."
   run_server
