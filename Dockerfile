@@ -29,6 +29,7 @@ RUN apt-get update && \
 ADD scripts/docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
 
-ADD configs/services.d /etc/
+COPY configs/services.d/apache2 /etc/services.d/apache2
+COPY configs/services.d/openxpki /etc/services.d/openxpki
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
