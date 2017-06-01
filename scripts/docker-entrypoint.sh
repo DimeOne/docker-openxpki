@@ -18,7 +18,7 @@ function waitForDbConnection {
     fi
     echo "Connection to MySql server failed, waiting 5s before trying again. [${connectionAttempt}/30]"
     sleep 5
-    connectionAttempts=$[$connectionAttempt +1]
+    connectionAttempt=$[$connectionAttempt +1]
   done
   echo "Connection to MySql server was successful."
 
