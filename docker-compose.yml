@@ -11,7 +11,7 @@ web:
   hostname: pki.example.org
   restart: always
   ports:
-    - "8080:80"
+    - "127.0.0.1:8080:80"
   links:
     - db:mysql
   volumes:
