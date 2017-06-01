@@ -94,7 +94,7 @@ function create_db {
   cat /tmp/create_db.sh | mysql -u root -p${APP_DB_ROOT_PASS} -h ${APP_DB_HOST} -P ${APP_DB_PORT}
 
   rm /tmp/create_db.sh
-
+  
 }
 
 function init_db {
@@ -198,20 +198,21 @@ elif [ -z "$1" ]; then
     echo "================================================"
     echo "Starting S6 supervisor."
     echo "================================================"
-    exec /init
+    openxpkictl start
+    apache2ctl -DFOREGROUND
   else
     echo "================================================"
     echo "No parameters given and /etc/openxpki/.initiated exist."
     echo "Starting S6 supervisor"
     echo "================================================"
-    exec /init
+    openxpkictl start
+    apache2ctl -DFOREGROUND
   fi
-elif [ "$1" == "noinit" ]; then
-  shift
-  exec "$@"
 else
   echo "================================================"
-  echo "Starting S6 supervisor with parameters: $@"
+  echo "Starting: $@"
   echo "================================================"
-  exec /init "$@"
+  apache2ctrl start
+  openxpkictl start
+  exec "$@"
 fi
