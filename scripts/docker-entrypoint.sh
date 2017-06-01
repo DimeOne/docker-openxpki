@@ -187,7 +187,9 @@ elif [ "$1" == "version" ]; then
   apache2 -v
   openxpkiadm version
 elif [ "$1" == "run" ]; then
-  echo "Launching S6 supervisor to start Apache2 and OpenXPKI."
+  echo "================================================"
+  echo "Starting Servers"
+  echo "================================================"
   run_server
 elif [ -z "$1" ]; then
   if [ ! -f "/etc/openxpki/.initiated" ]; then
@@ -213,13 +215,15 @@ elif [ -z "$1" ]; then
     echo "================================================"
     create_config
     echo "================================================"
-    echo "Starting S6 supervisor."
+    echo "Starting Servers"
     echo "================================================"
     run_server
   else
     echo "================================================"
     echo "No parameters given and /etc/openxpki/.initiated exist."
-    echo "Starting S6 supervisor"
+    echo "================================================"
+    echo "================================================"
+    echo "Starting Servers"
     echo "================================================"
     run_server
   fi
