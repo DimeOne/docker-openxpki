@@ -105,6 +105,16 @@ function init_db {
 
 }
 
+function run_server {
+
+  unset APP_DB_ROOT_PASS APP_DB_PASS
+
+  # openxpkictl start --foreground is not working
+  openxpkictl start
+
+  apache2ctl -DFOREGROUND
+
+}
 
 # Check for linked MYSQL container
 if [ -n "${MYSQL_NAME}" ]; then
@@ -114,6 +124,7 @@ if [ -n "${MYSQL_NAME}" ]; then
   MYSQL_DB_PORT=${MYSQL_PORT_3306_TCP_PORT}
   MYSQL_DB_USER=${MYSQL_ENV_MYSQL_USER}
   MYSQL_DB_PASS=${MYSQL_ENV_MYSQL_PASSWORD}
+  MYSQL_DB_ROOT_PASS=${MYSQL_ENV_MYSQL_ROOT_PASSWORD}
 
   # Unset the original variables to prevent leakage
   unset MYSQL_ENV_MYSQL_PASSWORD MYSQL_ENV_MYSQL_ROOT_PASSWORD
@@ -125,6 +136,7 @@ APP_DB_HOST=${APP_DB_HOST:-$MYSQL_DB_HOST}
 APP_DB_PORT=${APP_DB_PORT:-$MYSQL_DB_PORT}
 APP_DB_USER=${APP_DB_USER:-$MYSQL_DB_USER}
 APP_DB_PASS=${APP_DB_PASS:-$MYSQL_DB_PASS}
+APP_DB_ROOT_PASS=${APP_DB_ROOT_PASS:-$MYSQL_DB_ROOT_PASS}
 
 # Create default config files if missing - because of volume
 if [ ! -d /etc/openxpki/config.d ]; then
@@ -168,9 +180,8 @@ elif [ "$1" == "wait_for_db" ]; then
   checkDbVariables
   waitForDbConnection
 elif [ "$1" == "run" ]; then
-  waitForDbConnection
   echo "Launching S6 supervisor to start Apache2 and OpenXPKI."
-  exec /init
+  run_server
 elif [ -z "$1" ]; then
   if [ ! -f "/etc/openxpki/.initiated" ]; then
     echo "================================================"
@@ -198,15 +209,13 @@ elif [ -z "$1" ]; then
     echo "================================================"
     echo "Starting S6 supervisor."
     echo "================================================"
-    openxpkictl start
-    apache2ctl -DFOREGROUND
+    run_server
   else
     echo "================================================"
     echo "No parameters given and /etc/openxpki/.initiated exist."
     echo "Starting S6 supervisor"
     echo "================================================"
-    openxpkictl start
-    apache2ctl -DFOREGROUND
+    run_server
   fi
 else
   echo "================================================"
