@@ -5,6 +5,8 @@ We also provide a docker-compose.yml for easy startup and management.
 This container is supposed to run behind an nginx reverse-proxy to provide https, 
 therefore we provide a tested nginx configuration example.
 
+This container is designed to run with MySql but can be changed to use other database systems.
+
 # Quickstart
 
 A quickstart can be used for testing as it contains everything that is needed.
@@ -31,9 +33,35 @@ There are three parts of configuration that have to be considered. But will be c
 
 ## Database configuration
 
+This container is designed to run alongside a mysql container or atleast have the connection details configured using environment variables.
+When using the docker-compose.yml valid default values will be supplied but should be changed before starting the containers the first time.
 
+  - APP_DB_NAME=openxpki
+  - APP_DB_HOST=mysql
+  - APP_DB_PORT=3306
+  - APP_DB_USER=openxpki
+  - APP_DB_PASS=openxpki
+  - APP_DB_ROOT_PASS=super-secret-password
+
+The mysql port does not have to be exported when linked.
+
+When these variables are set, values in database.yml will be overwritten by these.
+
+APP_DB_ROOT_PASS is only required when creating a dabatase and can be omitted if the database already exists.
 
 ## PKI configuration
+
+The configuration of the pki is done within /etc/openxpki.
+
+If this folder doesn't contain a config.d folder, new configuration files will be extracted to this directory.
+
+When starting without parameters, if not .initiated file exists in the configuration directory, 
+the default sampleconfig.sh will be called to create and import new certificates.
+This process may be fine when running a demo but for should be edited when planning to run in production.
+
+For this case just create a createconfig.sh within the configuration directory, that will be called instead.
+
+These files are used to configure OpenXPKI, consult http://openxpki.readthedocs.io/en/latest/ for further information.
 
 ## Nginx configuration
 
@@ -43,28 +71,39 @@ This container is expected to be linked to a MySql server or have the connection
 
 ## create_db
 
+Creates a new database from the given environment variables. Requires MySql root password to be set.
+
 ## init_db
+
+Initiate the database with the mysql schema provided by openxpki.
 
 ## create_config
 
+Create configuration certificates from sampleconfig.sh or createconfig.sh
+
 ## wait_for_db
 
+Wait for a succesful database connection using credentials from environment variables.
+
 ## wait_for_db_root
+
+Wait for a succesful database connection using root and credentials from environment variables.
 
 
 # Environment Variables:
 
-  - APP_DB_NAME
-  - APP_DB_HOST
-  - APP_DB_PORT
-  - APP_DB_USER
-  - APP_DB_PASS
-  - APP_DB_ROOT_PASS
+  - APP_DB_NAME = openxpki
+  - APP_DB_HOST = mysql
+  - APP_DB_PORT = 3306
+  - APP_DB_USER = openxpki
+  - APP_DB_PASS = openxpki
+  - APP_DB_ROOT_PASS = super-secret-password
 
 
 # ToDo:
 
   - So much documentation.
+  - Generalize configuration for other dbs?
 
 
 # Known Issues:
@@ -74,7 +113,9 @@ This container is expected to be linked to a MySql server or have the connection
     - prevents running the processes through an external supervisor like s6 or supervisord
 
 # Sources:
+  - http://openxpki.readthedocs.io/en/latest/
   - https://github.com/openxpki/openxpki
   - https://github.com/jetpulp/docker-openxpki
-  
+  - https://github.com/just-containers/s6-overlay
+
  
