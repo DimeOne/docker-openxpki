@@ -22,10 +22,12 @@ RUN apt-get update && \
       mysql-client && \
     a2enmod fcgid && \
     apt-get remove -y wget && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    rm /var/www/html/index.html
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 ADD scripts/docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
+
+VOLUME ["/etc/openxpki", "/var/log/apache2", "/var/log/openxpki"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
