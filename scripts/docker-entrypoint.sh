@@ -32,7 +32,7 @@ function create_config {
      chown root:root /etc/openxpki/createconfig.sh
      chmod 700 /etc/openxpki/createconfig.sh
      /etc/openxpki/createconfig.sh
-  elif [ -f "/usr/share/doc/libopenxpki-perl/examples/" ]; then
+  elif [ -f "/usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh" ]; then
     echo "Found no custom createconfig.sh - using default sampleconfig.sh from /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh"
     /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
   else
@@ -115,6 +115,7 @@ elif [ -z "$1" ]; then
     echo "================================================"
     checkDbVariables
     waitForDbConnection
+    echo >/etc/openxpki/.initiated
     echo "================================================"
     echo "Initiating database."
     echo "================================================"
