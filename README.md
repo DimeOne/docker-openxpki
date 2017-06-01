@@ -17,6 +17,8 @@ The OpenXPKI sampleconfig.sh will be called after the database has been created 
     git clone https://github.com/DimeOne/docker-openxpki.git
     cd docker-openxpki
     docker-compose up -d && docker-compose logs -f
+    
+Start browser and navigate to http://127.0.0.1:8080
 
 # Userdata
 
@@ -34,7 +36,7 @@ There are three parts of configuration that have to be considered. But will be c
 ## Database configuration
 
 This container is designed to run alongside a mysql container or atleast have the connection details configured using environment variables.
-When using the docker-compose.yml valid default values will be supplied but should be changed before starting the containers the first time.
+When using the docker-compose.yml, valid default values will be supplied, but should be changed before starting the containers the first time.
 
   - APP_DB_NAME=openxpki
   - APP_DB_HOST=mysql
@@ -53,13 +55,13 @@ APP_DB_ROOT_PASS is only required when creating a dabatase and can be omitted if
 
 The configuration of the pki is done within /etc/openxpki.
 
-If this folder doesn't contain a config.d folder, new configuration files will be extracted to this directory.
+If this folder doesn't contain a config.d folder, new example configuration files will be extracted to this directory.
 
-When starting without parameters, if not .initiated file exists in the configuration directory, 
-the default sampleconfig.sh will be called to create and import new certificates.
-This process may be fine when running a demo but for should be edited when planning to run in production.
+When this container is started without parameters and no .initiated file in the config folder,
+the default sampleconfig.sh will be run oncec to create and import new certificates.
+The script sampleconfig.sh may be fine when running a demo but should be edited before being used in production.
 
-For this case just create a createconfig.sh within the configuration directory, that will be called instead.
+To use a custom sampleconfig.sh, just create a createconfig.sh in the configuration directory, that will be called instead.
 
 These files are used to configure OpenXPKI, consult http://openxpki.readthedocs.io/en/latest/ for further information.
 
