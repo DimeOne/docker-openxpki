@@ -31,6 +31,6 @@ RUN chmod 755 /docker-entrypoint.sh
 
 COPY configs/services.d/apache2 /etc/services.d/apache2
 COPY configs/services.d/openxpki /etc/services.d/openxpki
-COPY configs/fix-attrs.d/openxpki /etc/fix-attrs.d/
+COPY configs/fix-attrs.d /etc/fix-attrs.d/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
