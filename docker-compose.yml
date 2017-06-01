@@ -1,0 +1,25 @@
+db:
+  image: mysql:5.5
+  restart: always
+  volumes:
+    - ./mysql-data:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=my-super-secret-password
+web:
+  image: openxpki:latest
+  dns: 8.8.8.8
+  hostname: pki.example.org
+  restart: always
+  ports:
+    - "8080:80"
+  links:
+    - db:mysql
+  volumes:
+    - ./config:/etc/openxpki
+    - ./logs/apache2:/var/log/apache2
+    - ./logs/openxpki:/var/log/openxpki
+  environment:
+    - APP_DB_NAME=openxpki
+    - APP_DB_USER=openxpki
+    - APP_DB_PASS=openxpki
+    - APP_DB_ROOT_PASS=my-super-secret-password
