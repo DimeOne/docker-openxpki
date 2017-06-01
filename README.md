@@ -67,9 +67,13 @@ These files are used to configure OpenXPKI, consult http://openxpki.readthedocs.
 
 ## Nginx configuration
 
+This container has no https configuration and is expected to be run behind an nginx reverse-proxy.
+
 # Running & Commands
 
 This container is expected to be linked to a MySql server or have the connection details passed through environment variables.
+
+**The following commands can be used to access specific setup steps directly, by launching the container with the following commands:**
 
 ## create_db
 
@@ -91,6 +95,9 @@ Wait for a succesful database connection using credentials from environment vari
 
 Wait for a succesful database connection using root and credentials from environment variables.
 
+## run
+
+Run the Server.
 
 # Environment Variables:
 
