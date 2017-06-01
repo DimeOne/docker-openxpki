@@ -1,2 +1,2 @@
-﻿#!/usr/bin/execlineb -P
+#!/usr/bin/execlineb -P
 openxpkictl --foreground start

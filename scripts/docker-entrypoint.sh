@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 function checkDbVariables {
   if [ -z "${APP_DB_NAME}" ]; then echo "Missing APP_DB_NAME, set this variable or link a mysql server with the name mysql."; exit 101; fi
