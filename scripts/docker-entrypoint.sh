@@ -77,11 +77,11 @@ if [ ! -d /etc/openxpki/config.d ]; then
 fi
 
 echo "Updating database.yml"
-if [ -n "${APP_DB_NAME}" ]; then echo "Replacing DB_NAME with given APP_DB_NAME: ${APP_DB_NAME}"; sed -i 's/name: .*/name: ${APP_DB_NAME}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ -n "${APP_DB_HOST}" ]; then echo "Replacing DB_HOST with given APP_DB_HOST: ${APP_DB_HOST}"; sed -i 's/host: .*/host: ${APP_DB_HOST}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ -n "${APP_DB_PORT}" ]; then echo "Replacing DB_PORT with given APP_DB_PORT: ${APP_DB_PORT}"; sed -i 's/port: .*/port: ${APP_DB_PORT}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ -n "${APP_DB_USER}" ]; then echo "Replacing DB_USER with given APP_DB_USER: ${APP_DB_USER}"; sed -i 's/user: .*/user: ${APP_DB_USER}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ -n "${APP_DB_PASS}" ]; then echo "Replacing DB_PASS with given APP_DB_PASS: ${APP_DB_PASS}"; sed -i 's/passwd: .*/passwd: ${APP_DB_PASS}/' /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_NAME}" ]; then echo "Replacing DB_NAME with given APP_DB_NAME: ${APP_DB_NAME}"; sed -i "s/name: .*/name: ${APP_DB_NAME}/" /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_HOST}" ]; then echo "Replacing DB_HOST with given APP_DB_HOST: ${APP_DB_HOST}"; sed -i "s/host: .*/host: ${APP_DB_HOST}/" /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_PORT}" ]; then echo "Replacing DB_PORT with given APP_DB_PORT: ${APP_DB_PORT}"; sed -i "s/port: .*/port: ${APP_DB_PORT}/" /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_USER}" ]; then echo "Replacing DB_USER with given APP_DB_USER: ${APP_DB_USER}"; sed -i "s/user: .*/user: ${APP_DB_USER}/" /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_PASS}" ]; then echo "Replacing DB_PASS with given APP_DB_PASS: ${APP_DB_PASS}"; sed -i "s/passwd: .*/passwd: ${APP_DB_PASS}/" /etc/openxpki/config.d/system/database.yaml; fi
 
 
 # Start depending on parameters
