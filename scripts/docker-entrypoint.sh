@@ -93,6 +93,8 @@ function create_db {
 
   cat /tmp/create_db.sh | mysql -u root -p${APP_DB_ROOT_PASS} -h ${APP_DB_HOST} -P ${APP_DB_PORT}
 
+  rm /tmp/create_db.sh
+
 }
 
 function init_db {
@@ -177,6 +179,9 @@ elif [ -z "$1" ]; then
     echo "================================================"
     checkDbVariables
     if [ -n "${APP_DB_ROOT_PASS}" ]; then
+      echo "================================================"
+      echo "Creating database."
+      echo "================================================"
       waitForRootDbConnection
       create_db
     fi
