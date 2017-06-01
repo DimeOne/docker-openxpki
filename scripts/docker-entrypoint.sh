@@ -1,4 +1,4 @@
-﻿#
+﻿#!/bin/bash
 
 function checkDbVariables {
   if [ -z "${APP_DB_NAME}" ]; then echo "Missing APP_DB_NAME, set this variable or link a mysql server with the name mysql."; exit 101; fi
@@ -32,10 +32,14 @@ function create_config {
      chown root:root /etc/openxpki/createconfig.sh
      chmod 700 /etc/openxpki/createconfig.sh
      /etc/openxpki/createconfig.sh
-  elif [ -f "/usr/share/doc/libopenxpki-perl/examples/" ]
+  elif [ -f "/usr/share/doc/libopenxpki-perl/examples/" ]; then
     echo "Found no custom createconfig.sh - using default sampleconfig.sh from /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh"
     /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
-
+  else
+    echo "Found no sampleconfig.sh and no createconfig.sh"
+    exit 1
+  fi
+  
 }
 
 function init_db {
@@ -49,12 +53,11 @@ function init_db {
 # Check for linked MYSQL container
 if [ -n "${MYSQL_NAME}" ]; then
   echo "Found linked MySql container, updating variables."
-    MYSQL_DB_HOST="mysql"
-    MYSQL_DB_NAME=${MYSQL_ENV_MYSQL_DATABASE}
-    MYSQL_DB_PORT=${MYSQL_PORT_3306_TCP_PORT}
-    MYSQL_DB_USER=${MYSQL_ENV_MYSQL_USER}
-    MYSQL_DB_PASS=${MYSQL_ENV_MYSQL_PASSWORD}
-  fi
+  MYSQL_DB_HOST="mysql"
+  MYSQL_DB_NAME=${MYSQL_ENV_MYSQL_DATABASE}
+  MYSQL_DB_PORT=${MYSQL_PORT_3306_TCP_PORT}
+  MYSQL_DB_USER=${MYSQL_ENV_MYSQL_USER}
+  MYSQL_DB_PASS=${MYSQL_ENV_MYSQL_PASSWORD}
 
   # Unset the original variables to prevent leakage
   unset MYSQL_ENV_MYSQL_PASSWORD MYSQL_ENV_MYSQL_ROOT_PASSWORD
@@ -74,11 +77,11 @@ if [ ! -d /etc/openxpki/config.d ]; then
 fi
 
 echo "Updating database.yml"
-if [ "${APP_DB_NAME}" ]; then echo "Replacing DB_NAME with given APP_DB_NAME: ${APP_DB_NAME}"; sed -i 's/name: .*/name: ${APP_DB_NAME}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ "${APP_DB_HOST}" ]; then echo "Replacing DB_HOST with given APP_DB_HOST: ${APP_DB_HOST}"; sed -i 's/host: .*/host: ${APP_DB_HOST}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ "${APP_DB_PORT}" ]; then echo "Replacing DB_PORT with given APP_DB_PORT: ${APP_DB_PORT}"; sed -i 's/port: .*/port: ${APP_DB_PORT}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ "${APP_DB_USER}" ]; then echo "Replacing DB_USER with given APP_DB_USER: ${APP_DB_USER}"; sed -i 's/user: .*/user: ${APP_DB_USER}/' /etc/openxpki/config.d/system/database.yaml; fi
-if [ "${APP_DB_PASS}" ]; then echo "Replacing DB_PASS with given APP_DB_PASS: ${APP_DB_PASS}"; sed -i 's/passwd: .*/passwd: ${APP_DB_PASS}/' /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_NAME}" ]; then echo "Replacing DB_NAME with given APP_DB_NAME: ${APP_DB_NAME}"; sed -i 's/name: .*/name: ${APP_DB_NAME}/' /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_HOST}" ]; then echo "Replacing DB_HOST with given APP_DB_HOST: ${APP_DB_HOST}"; sed -i 's/host: .*/host: ${APP_DB_HOST}/' /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_PORT}" ]; then echo "Replacing DB_PORT with given APP_DB_PORT: ${APP_DB_PORT}"; sed -i 's/port: .*/port: ${APP_DB_PORT}/' /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_USER}" ]; then echo "Replacing DB_USER with given APP_DB_USER: ${APP_DB_USER}"; sed -i 's/user: .*/user: ${APP_DB_USER}/' /etc/openxpki/config.d/system/database.yaml; fi
+if [ -n "${APP_DB_PASS}" ]; then echo "Replacing DB_PASS with given APP_DB_PASS: ${APP_DB_PASS}"; sed -i 's/passwd: .*/passwd: ${APP_DB_PASS}/' /etc/openxpki/config.d/system/database.yaml; fi
 
 
 # Start depending on parameters
@@ -89,12 +92,11 @@ if [ "$1" == "initdb" ]; then
   checkDbVariables
   waitForDbConnection
   init_db
-elif [ "$1" == "create_certs"]; then
+elif [ "$1" == "create_certs" ]; then
   echo "================================================"
   echo "Received create_certs parameter, creating certificates."
   echo "================================================"
   create_config
-  fi
 elif [ "$1" == "wait_for_db" ]; then
   echo "================================================"
   echo "Received wait_for_db parameter, Waiting for successful database connection."
@@ -109,12 +111,21 @@ elif [ -z "$1" ]; then
   if [ ! -f "/etc/openxpki/.initiated" ]; then
     echo "================================================"
     echo "No parameters given and /etc/openxpki/.initiated does not exist."
-    echo "Initiating database and creating configs."
+    echo "Waiting for DB connection before initiating database and creating configs."
     echo "================================================"
     checkDbVariables
     waitForDbConnection
+    echo "================================================"
+    echo "Initiating database."
+    echo "================================================"
     init_db
+    echo "================================================"
+    echo "Creating configuration files."
+    echo "================================================"
     create_config
+    echo "================================================"
+    echo "Starting S6 supervisor."
+    echo "================================================"
     exec /init
   else
     echo "================================================"
@@ -126,7 +137,6 @@ elif [ -z "$1" ]; then
 elif [ "$1" == "noinit" ]; then
   shift
   exec "$@"
-fi
 else
   echo "================================================"
   echo "Starting S6 supervisor with parameters: $@"
