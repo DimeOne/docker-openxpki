@@ -53,7 +53,7 @@ function waitForRootDbConnection {
     sleep 5
     connectionAttempt=$[$connectionAttempt +1]
   done
-  echo "Connection to MySql server was successful."
+  echo "Connection to MySql server as root was successful."
 
 }
 
@@ -190,10 +190,10 @@ elif [ -z "$1" ]; then
     echo "================================================"
     checkDbVariables
     if [ -n "${APP_DB_ROOT_PASS}" ]; then
+      waitForRootDbConnection
       echo "================================================"
       echo "Creating database."
       echo "================================================"
-      waitForRootDbConnection
       create_db
     fi
     waitForDbConnection
