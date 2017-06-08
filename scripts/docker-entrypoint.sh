@@ -231,7 +231,7 @@ else
   echo "================================================"
   echo "Starting: $@"
   echo "================================================"
-  apache2ctrl start
+  apache2ctl start
   openxpkictl start
   exec "$@"
 fi
