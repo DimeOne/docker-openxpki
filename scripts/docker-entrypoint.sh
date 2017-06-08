@@ -3,9 +3,9 @@
 function fixPermissions {
 
   chown openxpki:openxpki /etc/openxpki -R
-  if [ -f "/etc/openxpki/createconfig.sh" ]; then
-    chmod 0700 /etc/openxpki/create_config.sh
-    chown root:root /etc/openxpki/create_config.sh
+  if [ -f "/etc/openxpki/customconfig.sh" ]; then
+    chmod 0700 /etc/openxpki/customconfig.sh
+    chown root:root /etc/openxpki/customconfig.sh
   fi
   
   mkdir -p /var/log/apache2 && chown -R www-data:www-data /var/log/apache2 && chmod 0775 /var/log/apache2 && chmod 0664 /var/log/apache2/*
@@ -60,16 +60,16 @@ function waitForRootDbConnection {
 function create_config {
 
   # Use custom configuration if available - otherwise the default
-  if [ -f "/etc/openxpki/createconfig.sh" ]; then
+  if [ -f "/etc/openxpki/customconfig.sh" ]; then
      echo "Found custom configuration, securing and executing it."
-     chown root:root /etc/openxpki/createconfig.sh
-     chmod 700 /etc/openxpki/createconfig.sh
-     /etc/openxpki/createconfig.sh
+     chown root:root /etc/openxpki/customconfig.sh
+     chmod 700 /etc/openxpki/customconfig.sh
+     /etc/openxpki/customconfig.sh
   elif [ -f "/usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh" ]; then
-    echo "Found no custom createconfig.sh - using default sampleconfig.sh from /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh"
+    echo "Found no custom customconfig.sh - using default sampleconfig.sh from /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh"
     /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
   else
-    echo "Found no sampleconfig.sh and no createconfig.sh"
+    echo "Found no sampleconfig.sh and no customconfig.sh"
     exit 1
   fi
   

@@ -58,12 +58,12 @@ The configuration of the pki is done within /etc/openxpki.
 If this folder doesn't contain a config.d folder, new example configuration files will be extracted to this directory.
 
 When this container is started without parameters and no .initiated file in the config folder,
-the default sampleconfig.sh will be run oncec to create and import new certificates.
-The script sampleconfig.sh may be fine when running a demo but should be edited before being used in production.
+the default [sampleconfig.sh][2] will be run oncec to create and import new certificates.
+The script [sampleconfig.sh][2] may be fine when running a demo but should be edited before being used in production.
 
-To use a custom sampleconfig.sh, just create a createconfig.sh in the configuration directory, that will be called instead.
+To use a custom sampleconfig.sh, just create a customconfig.sh in the configuration directory, that will be called instead.
 
-These files are used to configure OpenXPKI, consult http://openxpki.readthedocs.io/en/latest/ for further information.
+These files are used to configure OpenXPKI, consult [the OpenXPKI manual][1] for further information.
 
 ## Nginx configuration
 
@@ -126,9 +126,12 @@ Show the versions of the used tools.
     - prevents running the processes through an external supervisor like s6 or supervisord
 
 # Sources:
-  - http://openxpki.readthedocs.io/en/latest/
+  - [OpenXPKI manual][1]
+  - [OpenXPKI sampleconfig.sh][2]
   - https://github.com/openxpki/openxpki
   - https://github.com/jetpulp/docker-openxpki
   - https://github.com/just-containers/s6-overlay
 
+[1]: http://openxpki.readthedocs.io/en/latest/ (OpenXPKI manual)
+[2]: https://github.com/openxpki/openxpki/blob/develop/config/sampleconfig.sh (OpenXPKI latest sampleconfig.sh)
  
