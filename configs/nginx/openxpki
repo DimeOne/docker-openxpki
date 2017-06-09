@@ -1,0 +1,74 @@
+upstream openxpki {
+  server 127.0.0.1:8080 fail_timeout=0;
+}
+
+server {
+  listen 80;
+  server_name openxpki.local.domain pki;
+  
+  root /srv/docker/openxpki/www;
+
+  location / {
+    return 301 https://openxpki.local.domain$request_uri;
+  }
+
+  location /certs {
+    alias /srv/docker/openxpki/www/certs;
+    autoindex on;
+  }
+
+}
+
+server {
+  listen 443 ssl;
+  server_name openxpki.local.domain pki;
+
+  keepalive_requests    10;
+  keepalive_timeout     60 60;
+  ssl_certificate       ssl/openxpki.crt;
+  ssl_certificate_key   ssl/private/openxpki.key;
+
+  include /etc/nginx/ssl_params;
+  include /etc/nginx/header_params;
+
+  root /srv/docker/openxpki/www;
+  
+  location / {
+    return 301 https://openxpki.local.domain/openxpki/;
+  }
+  
+  location /certs {
+    alias /srv/docker/openxpki/www/certs;
+    autoindex on;
+  }
+        
+  location /openxpki {
+    alias /srv/docker/openxpki/www/openxpki;
+  }
+
+  location /scep {
+    include /etc/nginx/proxy_params;
+    proxy_pass  http://openxpki;
+    proxy_redirect http:// https://;
+  }  
+  
+  location /soap {
+    include /etc/nginx/proxy_params;
+    proxy_pass  http://openxpki;
+    proxy_redirect http:// https://;
+  } 
+
+  location /rpc {
+    include /etc/nginx/proxy_params;
+    proxy_pass  http://openxpki;
+    proxy_redirect http:// https://;
+  }
+
+  location /cgi-bin {
+    include /etc/nginx/proxy_params;
+    proxy_pass  http://openxpki;
+    proxy_redirect http:// https://;
+  }
+  
+}
+
