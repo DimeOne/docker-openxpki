@@ -69,6 +69,8 @@ These files are used to configure OpenXPKI, consult [the OpenXPKI manual][1] for
 
 This container has no https configuration and is expected to be run behind an nginx reverse-proxy.
 
+An example configuration may be found within this repository at configs/nginx/openxpki
+
 # Running & Commands
 
 This container is expected to be linked to a MySql server or have the connection details passed through environment variables.
