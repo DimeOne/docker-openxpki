@@ -83,9 +83,9 @@ Creates a new database from the given environment variables. Requires MySql root
 
 Initiate the database with the mysql schema provided by openxpki.
 
-## create_config
+## create_certs
 
-Create configuration certificates from sampleconfig.sh or createconfig.sh
+Create certificates from sampleconfig.sh or customconfig.sh
 
 ## wait_for_db
 
@@ -128,10 +128,11 @@ Show the versions of the used tools.
 # Sources:
   - [OpenXPKI manual][1]
   - [OpenXPKI sampleconfig.sh][2]
-  - https://github.com/openxpki/openxpki
-  - https://github.com/jetpulp/docker-openxpki
-  - https://github.com/just-containers/s6-overlay
+  - [OpenXPKI Official Repository][3]
+  - [OpenXPKI Docker container template by jetpulp][4]
+
 
 [1]: http://openxpki.readthedocs.io/en/latest/ (OpenXPKI manual)
 [2]: https://github.com/openxpki/openxpki/blob/develop/config/sampleconfig.sh (OpenXPKI latest sampleconfig.sh)
- 
+[3]: https://github.com/openxpki/openxpki (OpenXPKI Official Repository)
+[4]: https://github.com/jetpulp/docker-openxpki (OpenXPKI Docker Container by jetpulp)
