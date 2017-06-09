@@ -14,6 +14,8 @@ RUN apt-get update && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      openjdk-7-jre \
+      ca-certificates-java \
       libdbd-mysql-perl \
       libapache2-mod-fcgid \
       libopenxpki-perl \
