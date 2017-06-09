@@ -17,15 +17,19 @@ RUN apt-get update && \
       openjdk-7-jre \
       ca-certificates-java \
       libdbd-mysql-perl \
+      libapache2-mod-rpaf \
       libapache2-mod-fcgid \
       libopenxpki-perl \
       openxpki-i18n \
       openca-tools \
       mysql-client && \
     a2enmod fcgid && \
+    a2enmod rpaf && \
+    a2dismod status && \
     apt-get remove -y wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ADD configs/apache2/mods-enabled/rpaf.conf /etc/apache2/mods-enabled/rpaf.conf
 
 ADD scripts/docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
