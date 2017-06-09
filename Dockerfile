@@ -28,6 +28,6 @@ RUN apt-get update && \
 ADD scripts/docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
 
-VOLUME ["/etc/openxpki", "/var/log/apache2", "/var/log/openxpki"]
+VOLUME ["/etc/openxpki"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
