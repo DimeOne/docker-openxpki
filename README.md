@@ -18,7 +18,7 @@ The OpenXPKI sampleconfig.sh will be called after the database has been created 
     cd docker-openxpki
     docker-compose up -d && docker-compose logs -f
     
-Start browser and navigate to http://127.0.0.1:8080
+Start browser and navigate to http://127.0.0.1:8080/openxpki
 
 # Userdata
 
