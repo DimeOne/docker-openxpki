@@ -3,12 +3,15 @@ FROM debian:jessie
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+ENV OPENXPKI_VERSION_MAJOR=1
+ENV OPENXPKI_VERSION_MINOR=19
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y wget && \
     wget http://packages.openxpki.org/debian/Release.key -O - | apt-key add - && \
     echo "deb http://packages.openxpki.org/debian/ jessie release" > /etc/apt/sources.list.d/openxpki.list && \
     echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/sources.list && \
+    echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list && \  
     apt-get update && \
     apt-get install -y locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -18,9 +21,11 @@ RUN apt-get update && \
       libapache2-mod-rpaf \
       libapache2-mod-fcgid \
       libopenxpki-perl \
-      openxpki-i18n \
+      openxpki-i18n=${OPENXPKI_VERSION_MAJOR}.${OPENXPKI_VERSION_MINOR}.* \
       openca-tools \
-      mysql-client && \
+      mysql-client \
+      openjdk-8-jre \
+      ca-certificates-java && \
     a2enmod fcgid && \
     a2enmod rpaf && \
     a2dismod status && \

@@ -6,7 +6,7 @@ db:
   environment:
     - MYSQL_ROOT_PASSWORD=my-super-secret-password
 web:
-  image: dime/openxpki:latest
+  build: .
   dns: 8.8.8.8
   hostname: pki.example.org
   restart: always

@@ -64,10 +64,18 @@ function create_config {
      echo "Found custom configuration, securing and executing it."
      chown root:root /etc/openxpki/customconfig.sh
      chmod 700 /etc/openxpki/customconfig.sh
-     /etc/openxpki/customconfig.sh
+     sh /etc/openxpki/customconfig.sh
   elif [ -f "/usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh" ]; then
     echo "Found no custom customconfig.sh - using default sampleconfig.sh from /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh"
-    /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+    chown root:root /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+    chmod 700 /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+    sh /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+  elif [ -f "/usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh.gz" ]; then
+    echo "Found no custom customconfig.sh - using default compressed sampleconfig.sh.gz from /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh"
+  	gunzip < /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh.gz > /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+    chown root:root /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+    chmod 700 /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
+    sh /usr/share/doc/libopenxpki-perl/examples/sampleconfig.sh
   else
     echo "Found no sampleconfig.sh and no customconfig.sh"
     exit 1
