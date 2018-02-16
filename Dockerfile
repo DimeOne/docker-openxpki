@@ -23,7 +23,7 @@ RUN echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/so
       openxpki-i18n=${OPENXPKI_VERSION_MAJOR}.${OPENXPKI_VERSION_MINOR}.* \
       openca-tools \
       mysql-client \
-      openjdk-8-jre \
+      openjdk-8-jre-headless \
       ca-certificates-java && \
     a2enmod fcgid && \
     a2enmod rpaf && \
